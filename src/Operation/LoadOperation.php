@@ -10,8 +10,8 @@ use Tbajorek\DoctrineFileFixturesBundle\Model\Entity\Provider;
 use Tbajorek\DoctrineFileFixturesBundle\Model\Entity\EntityPersistorInterface;
 use Tbajorek\DoctrineFileFixturesBundle\Model\Entity\Hydrator;
 use Tbajorek\DoctrineFileFixturesBundle\Model\Entity\SharedRepository;
-use Tbajorek\DoctrineFileFixturesBundle\Model\FixtureFile\FileResolverFactory;
-use Tbajorek\DoctrineFileFixturesBundle\Model\FixtureFile\FixtureAdapterFactory;
+use Tbajorek\DoctrineFileFixturesBundle\Model\FixtureFile\Factory\FileResolverFactory;
+use Tbajorek\DoctrineFileFixturesBundle\Model\FixtureFile\Factory\FixtureAdapterFactory;
 use Tbajorek\DoctrineFileFixturesBundle\Model\FixturesException;
 use Tbajorek\DoctrineFileFixturesBundle\Model\LoggerInterface;
 
