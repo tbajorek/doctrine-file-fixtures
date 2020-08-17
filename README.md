@@ -1,6 +1,7 @@
 # Doctrine File Fixtures
 [![Source Code][badge-source]][source]
 [![Latest Version][badge-release]][release]
+[![Downloads][badge-downloads]][downloads]
 [![Software License][badge-license]][license]
 
 ## About the project
@@ -13,7 +14,7 @@ The preferred method of installation is via Packagist and Composer. Installation
 
 1. Run the following command to install the package and add it as a requirement to your project's composer.json:
 ```shell script
-composer require tbajorek/doctrine-file-fixtures
+composer require tbajorek/doctrine-file-fixtures-bundle
 ```
 
 2. Add this line:
@@ -48,13 +49,13 @@ As this library is still being developed, there are some planed features to be i
 
 [badge-source]: http://img.shields.io/badge/source-tbajorek/doctrine--file--fixtures-blue.svg?style=flat-square
 [badge-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[badge-release]: https://img.shields.io/packagist/v/tbajorek/doctrine-file-fixtures.svg?style=flat-square
-[badge-downloads]: https://img.shields.io/packagist/dt/tbajorek/doctrine-file-fixtures.svg?style=flat-square
+[badge-release]: https://img.shields.io/packagist/v/tbajorek/doctrine-file-fixtures-bundle.svg?style=flat-square
+[badge-downloads]: https://img.shields.io/packagist/dt/tbajorek/doctrine-file-fixtures-bundle.svg?style=flat-square
 
 [source]: https://github.com/tbajorek/doctrine-file-fixtures
 [license]: https://github.com/tbajorek/doctrine-file-fixtures/blob/master/LICENSE
-[release]: https://packagist.org/packages/tbajorek/doctrine-file-fixtures
-[downloads]: https://packagist.org/packages/tbajorek/doctrine-file-fixtures
+[release]: https://packagist.org/packages/tbajorek/doctrine-file-fixtures-bundle
+[downloads]: https://packagist.org/packages/tbajorek/doctrine-file-fixtures-bundle
 
 [configuration]: https://github.com/tbajorek/doctrine-file-fixtures/blob/master/docs/1.configuration.md
 [fixture_file_formats]: https://github.com/tbajorek/doctrine-file-fixtures/blob/master/docs/2.fixture_file_formats.md
