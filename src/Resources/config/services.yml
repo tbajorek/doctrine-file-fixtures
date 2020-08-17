@@ -1,0 +1,140 @@
+services:
+  tbajorek.doctrine_file_fixture.bundle_config:
+    class: Tbajorek\DoctrineFileFixturesBundle\Model\Config\BundleConfig
+    arguments:
+      $configArray: '%bundle.config%'
+      $projectDir: '%kernel.project_dir%'
+  tbajorek.doctrine_file_fixture.load_command:
+    class: Tbajorek\DoctrineFileFixturesBundle\Loader\Command\LoadFixturesCommand
+    tags: ['console.command']
+    arguments:
+      $loadOperation: '@tbajorek.doctrine_file_fixture.load_operation'
+      $clearOperation: '@tbajorek.doctrine_file_fixture.purge_operation'
+  tbajorek.doctrine_file_fixture.purge_operation:
+    class: Tbajorek\DoctrineFileFixturesBundle\Operation\PurgeDatabase
+    arguments:
+      $entityCleaner: '@Tbajorek\DoctrineFileFixturesBundle\Doctrine\Entity\EntityCleaner'
+      $metadataProvider: '@Tbajorek\DoctrineFileFixturesBundle\Model\Config\MetadataProviderInterface'
+  tbajorek.doctrine_file_fixture.load_operation:
+    class: Tbajorek\DoctrineFileFixturesBundle\Operation\LoadOperation
+    arguments:
+      $metadataProvider: '@Tbajorek\DoctrineFileFixturesBundle\Model\Config\MetadataProviderInterface'
+      $dependencyResolver: '@tbajorek.doctrine_file_fixture.entity_dependency_resolver'
+      $resolverFactory: '@tbajorek.doctrine_file_fixture.resolver_file_factory'
+      $adapterFactory: '@tbajorek.doctrine_file_fixture.fixture_file_factory'
+      $entityProvider: '@tbajorek.doctrine_file_fixture.entity_provider'
+      $hydrator: '@tbajorek.doctrine_file_fixture.hydrator'
+      $entityPersistor: '@Tbajorek\DoctrineFileFixturesBundle\Model\Entity\EntityPersistorInterface'
+      $sharedRepository: '@tbajorek.doctrine_file_fixture.shared_repository'
+  tbajorek.doctrine_file_fixture.entity_dependency_resolver:
+    class: Tbajorek\DoctrineFileFixturesBundle\Model\Entity\DependencyResolver
+    arguments:
+      $metadataProvider: '@Tbajorek\DoctrineFileFixturesBundle\Model\Config\MetadataProviderInterface'
+  Tbajorek\DoctrineFileFixturesBundle\Doctrine\Metadata\Provider:
+    arguments:
+      $entityManager: '@doctrine.orm.entity_manager'
+  Tbajorek\DoctrineFileFixturesBundle\Doctrine\Entity\EntityPersistor:
+    arguments:
+      $entityManager: '@doctrine.orm.entity_manager'
+  Tbajorek\DoctrineFileFixturesBundle\Doctrine\Entity\EntityCleaner:
+    arguments:
+      $entityManager: '@doctrine.orm.entity_manager'
+  tbajorek.doctrine_file_fixture.entity_factory:
+    class: Tbajorek\DoctrineFileFixturesBundle\Model\Entity\Provider\EntityFactory
+  Tbajorek\DoctrineFileFixturesBundle\Doctrine\Entity\Provider\Repository:
+    arguments:
+      $entityManager: '@doctrine.orm.entity_manager'
+  tbajorek.doctrine_file_fixture.entity_provider:
+    class: Tbajorek\DoctrineFileFixturesBundle\Model\Entity\Provider
+    arguments:
+      $bundleConfig: '@tbajorek.doctrine_file_fixture.bundle_config'
+      $repository: '@Tbajorek\DoctrineFileFixturesBundle\Model\Entity\Provider\RepositoryInterface'
+      $entityFactory: '@tbajorek.doctrine_file_fixture.entity_factory'
+  tbajorek.doctrine_file_fixture.fixture_file_factory:
+    class: Tbajorek\DoctrineFileFixturesBundle\Model\FixtureFile\Factory\FixtureAdapterFactory
+    arguments:
+      $container: '@service_container'
+      $bundleConfig: '@tbajorek.doctrine_file_fixture.bundle_config'
+      $extensionMapping:
+        csv: Tbajorek\DoctrineFileFixturesBundle\Model\FixtureFile\Adapter\Csv
+        xlsx: Tbajorek\DoctrineFileFixturesBundle\Model\FixtureFile\Adapter\Xlsx
+  Tbajorek\DoctrineFileFixturesBundle\Model\FixtureFile\Adapter\Csv:
+    public: true
+  Tbajorek\DoctrineFileFixturesBundle\Model\FixtureFile\Adapter\Xlsx:
+    public: true
+    arguments:
+      $excelAdapter: '@Tbajorek\DoctrineFileFixturesBundle\Model\FixtureFile\Adapter\Xlsx\ExcelAdapterInterface'
+      $metadataProvider: '@Tbajorek\DoctrineFileFixturesBundle\Model\Config\MetadataProviderInterface'
+  tbajorek.doctrine_file_fixture.resolver_file_factory:
+    class: Tbajorek\DoctrineFileFixturesBundle\Model\FixtureFile\Factory\FileResolverFactory
+    arguments:
+      $container: '@service_container'
+      $bundleConfig: '@tbajorek.doctrine_file_fixture.bundle_config'
+      $extensionMapping:
+        csv: Tbajorek\DoctrineFileFixturesBundle\Model\FixtureFile\Resolver\FilePerEntityResolver
+        xlsx: Tbajorek\DoctrineFileFixturesBundle\Model\FixtureFile\Resolver\SingleFileResolver
+  Tbajorek\DoctrineFileFixturesBundle\Model\FixtureFile\Resolver\FilePerEntityResolver:
+    public: true
+    arguments:
+      $bundleConfig: '@tbajorek.doctrine_file_fixture.bundle_config'
+      $metadataProvider: Tbajorek\DoctrineFileFixturesBundle\Model\Config\MetadataProviderInterface
+  Tbajorek\DoctrineFileFixturesBundle\Model\FixtureFile\Resolver\SingleFileResolver:
+    public: true
+    arguments:
+      $bundleConfig: '@tbajorek.doctrine_file_fixture.bundle_config'
+  tbajorek.doctrine_file_fixture.field_name_resolver:
+    class: Tbajorek\DoctrineFileFixturesBundle\Model\Entity\FieldNameResolver
+    arguments:
+      $bundleConfig: '@tbajorek.doctrine_file_fixture.bundle_config'
+  tbajorek.doctrine_file_fixture.field_setter.normal:
+    class: Tbajorek\DoctrineFileFixturesBundle\Model\Entity\Hydrator\FieldSetter\NormalSetter
+    arguments:
+      $nonAccessibleFieldHelper: '@Tbajorek\DoctrineFileFixturesBundle\Model\Entity\Hydrator\NonAccessibleFieldHelper'
+  tbajorek.doctrine_file_fixture.field_setter.relation:
+    class: Tbajorek\DoctrineFileFixturesBundle\Model\Entity\Hydrator\FieldSetter\RelationSetter
+    arguments:
+      $sharedRepository: '@tbajorek.doctrine_file_fixture.shared_repository'
+      $nonAccessibleFieldHelper: '@Tbajorek\DoctrineFileFixturesBundle\Model\Entity\Hydrator\NonAccessibleFieldHelper'
+  tbajorek.doctrine_file_fixture.field_setter:
+    class: Tbajorek\DoctrineFileFixturesBundle\Model\Entity\Hydrator\FieldSetter
+    arguments:
+      $normalSetter: '@tbajorek.doctrine_file_fixture.field_setter.normal'
+      $relationSetter: '@tbajorek.doctrine_file_fixture.field_setter.relation'
+      $bundleConfig: '@tbajorek.doctrine_file_fixture.bundle_config'
+      $valueGetterFactory: '@tbajorek.doctrine_file_fixture.value_getter_factory'
+  tbajorek.doctrine_file_fixture.shared_repository:
+    class: Tbajorek\DoctrineFileFixturesBundle\Model\Entity\SharedRepository
+  tbajorek.doctrine_file_fixture.hydrator:
+    class: Tbajorek\DoctrineFileFixturesBundle\Model\Entity\Hydrator
+    arguments:
+      $fieldNameResolver: '@tbajorek.doctrine_file_fixture.field_name_resolver'
+      $fieldSetter: '@tbajorek.doctrine_file_fixture.field_setter'
+  Tbajorek\DoctrineFileFixturesBundle\Model\Entity\Hydrator\ValueGetter\DecimalValueGetter:
+    public: true
+  Tbajorek\DoctrineFileFixturesBundle\Model\Entity\Hydrator\ValueGetter\DatetimeValueGetter:
+    public: true
+  Tbajorek\DoctrineFileFixturesBundle\Model\Entity\Hydrator\ValueGetter\DefaultValueGetter:
+    public: true
+  Tbajorek\DoctrineFileFixturesBundle\Model\Entity\Hydrator\ValueGetter\IntegerValueGetter:
+    public: true
+  Tbajorek\DoctrineFileFixturesBundle\Model\Entity\Hydrator\ValueGetter\StringValueGetter:
+    public: true
+  tbajorek.doctrine_file_fixture.value_getter_factory:
+    class: Tbajorek\DoctrineFileFixturesBundle\Model\Entity\Hydrator\ValueGetterFactory
+    arguments:
+      $container: '@service_container'
+      $defaultValueGetter: '@Tbajorek\DoctrineFileFixturesBundle\Model\Entity\Hydrator\ValueGetter\DecimalValueGetter'
+      $getters:
+        decimal: Tbajorek\DoctrineFileFixturesBundle\Model\Entity\Hydrator\ValueGetter\DecimalValueGetter
+        datetime: Tbajorek\DoctrineFileFixturesBundle\Model\Entity\Hydrator\ValueGetter\DatetimeValueGetter
+        time: Tbajorek\DoctrineFileFixturesBundle\Model\Entity\Hydrator\ValueGetter\DatetimeValueGetter
+        integer: Tbajorek\DoctrineFileFixturesBundle\Model\Entity\Hydrator\ValueGetter\IntegerValueGetter
+        boolean: Tbajorek\DoctrineFileFixturesBundle\Model\Entity\Hydrator\ValueGetter\IntegerValueGetter
+        string: Tbajorek\DoctrineFileFixturesBundle\Model\Entity\Hydrator\ValueGetter\StringValueGetter
+  Tbajorek\DoctrineFileFixturesBundle\Model\Entity\Provider\RepositoryInterface: '@Tbajorek\DoctrineFileFixturesBundle\Doctrine\Entity\Provider\Repository'
+  Tbajorek\DoctrineFileFixturesBundle\Model\Config\MetadataProviderInterface: '@Tbajorek\DoctrineFileFixturesBundle\Doctrine\Metadata\Provider'
+  Tbajorek\DoctrineFileFixturesBundle\Model\Entity\EntityPersistorInterface: '@Tbajorek\DoctrineFileFixturesBundle\Doctrine\Entity\EntityPersistor'
+  Tbajorek\DoctrineFileFixturesBundle\Model\Entity\EntityCleanerInterface: '@Tbajorek\DoctrineFileFixturesBundle\Doctrine\Entity\EntityCleaner'
+  Tbajorek\DoctrineFileFixturesBundle\Model\FixtureFile\Adapter\Xlsx\ExcelAdapterInterface: '@Tbajorek\DoctrineFileFixturesBundle\Excel\ExcelAdapter'
+  Tbajorek\DoctrineFileFixturesBundle\Excel\ExcelAdapter: ~
+  Tbajorek\DoctrineFileFixturesBundle\Model\Entity\Hydrator\NonAccessibleFieldHelper: ~
