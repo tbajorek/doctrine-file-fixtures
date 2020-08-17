@@ -6,7 +6,7 @@
 ## About the project
 The library is designed to offer you a functionality of loading database fixtures from files. It supports different file formats. The library can be extended and adapted in your projects.
 
-Current version is still in progress. The most important of non-supported (yet!) functionality is Many-To-Many relation. It will be implemented in next version. However for simple model structure the library works well.
+Current version is still in progress. The most important of non-supported (yet!) functionality is Many-To-Many relation. It will be implemented in next version. However, for simple model structure the library works well.
 
 ## Installation
 The preferred method of installation is via Packagist and Composer. Installation is very simple:
@@ -22,7 +22,7 @@ Tbajorek\DoctrineFileFixturesBundle\DoctrineFileFixturesBundle::class => ['all' 
 ```
 to array in `config/bundles.php` file in your project to register the bundle.
 
-Library is provided with some default configuration, so it's not required to define it. However, you can set it to meet your expectations.
+Library is provided with some default configuration, so it's not required to define it. However, you can change it to meet your expectations. Read more about configuration [HERE][configuration].
 
 ## Usage
 The library is used from command line. It adds some commands to your project.
